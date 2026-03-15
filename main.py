@@ -6,11 +6,16 @@ import os
 
 st.title("クラウドコストダッシュボード")
 
-csv_path = "input.csv"
+csv_file_path = "input.csv"
 file = st.file_uploader("CSVファイルをアップロードしてください.", type=["csv"])
 
 if file:
-    df = pd.read_csv(file)
+    st.text("CSVファイルアップロード成功")
+    with open(csv_file_path, "wb") as f:
+        f.write(file.read())
+
+if os.path.exists(csv_file_path):
+    df = pd.read_csv(csv_file_path)
     st.dataframe(df)
     #:列1 Date "2025-09-13"
     #:列2 Service "Amazon EC2"
