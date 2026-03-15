@@ -22,9 +22,17 @@ if os.path.exists(csv_file_path):
     #:列3 CostUSD "2.09"
     #:列4 UsageQuantity "32.25"
 
+    df["Date"] = pd.to_datetime(df["Date"])
+
+    #:日付フィルタ
+    if st.checkbox("日付フィルタを有効にする"):
+        start_date = st.date_input("開始日", key="start_date")
+        finish_date = st.date_input("終了日", key="finish_date")
+        query_text = f'"{start_date}" <= Date < "{finish_date}"'
+        df = df.query(query_text)
+
     #:月毎の total cost を集計する。
     st.header("月毎の total cost")
-    df["Date"] = pd.to_datetime(df["Date"])
     df["Month"] = df["Date"].dt.strftime("%Y-%m")
     monthly = df.groupby("Month")["CostUSD"].sum().reset_index()
     st.dataframe(monthly)
