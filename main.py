@@ -2,17 +2,13 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import csv
+import os
 
 st.title("クラウドコストダッシュボード")
 
-# st.title("はじめてのStreamlit")
-# st.write("これは簡単なデータ表示アプリです。1")
-# df = pd.DataFrame({"x": np.arange(1, 11), "y": np.random.randint(10, 100, 10)})
-# st.write("サンプルデータ：")
-# st.dataframe(df)
-# st.line_chart(df.set_index("x"))
-
+csv_path = "input.csv"
 file = st.file_uploader("CSVファイルをアップロードしてください.", type=["csv"])
+
 if file:
     df = pd.read_csv(file)
     st.dataframe(df)
@@ -24,7 +20,6 @@ if file:
     #:月毎の total cost を集計する。
     st.header("月毎の total cost")
     df["Date"] = pd.to_datetime(df["Date"])
-    # df["Month"] = df["Date"].dt.to_period("M")
     df["Month"] = df["Date"].dt.strftime("%Y-%m")
     monthly = df.groupby("Month")["CostUSD"].sum().reset_index()
     st.dataframe(monthly)
@@ -43,7 +38,3 @@ if file:
     #:expected | 2025-09 | AWS CloudTrail | 160.68 |
     #:actual   | 2025-09 | AWS CloudTrail | 160.68 |
     st.bar_chart(chart_data)
-    # st.bar_chart(chart_data, x="Month", y="CostUSD")
-    # st.bar_chart(
-    #     service_monthly, x="Month", y="CostUSD", color=["red", "blue", "green"]
-    # )
