@@ -43,11 +43,20 @@ if os.path.exists(csv_file_path):
     #:service別コストを集計する。
     st.header("service別コスト")
     service_monthly = df.groupby(["Month", "Service"])["CostUSD"].sum().reset_index()
-    chart_data = service_monthly.pivot(
+    service_monthly_pivot = service_monthly.pivot(
         index="Month", columns="Service", values="CostUSD"
     )
-    st.dataframe(chart_data)
+    st.dataframe(service_monthly_pivot)
     #:         | Month.  | Service  | CostUSD |
     #:expected | 2025-09 | AWS CloudTrail | 160.68 |
     #:actual   | 2025-09 | AWS CloudTrail | 160.68 |
-    st.bar_chart(chart_data)
+    st.bar_chart(service_monthly_pivot)
+
+    #:Region別コストを集計する。
+    st.header("Region別コスト")
+    region_monthly = df.groupby(["Month", "Region"])["CostUSD"].sum().reset_index()
+    region_monthly_pivot = region_monthly.pivot(
+        index="Month", columns="Region", values="CostUSD"
+    )
+    st.dataframe(region_monthly_pivot)
+    st.bar_chart(region_monthly_pivot)

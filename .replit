@@ -25,7 +25,7 @@ run = [
   "--server.address",
   "0.0.0.0",
 ]
-deploymentTarget = "cloudrun"
+deploymentTarget = "scheduled"
 
 [agent]
 expertMode = true
