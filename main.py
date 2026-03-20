@@ -47,12 +47,12 @@ if os.path.exists(csv_file_path):
     df["Month"] = df["Date"].dt.strftime("%Y-%m")
     monthly = df.groupby("Month")["CostUSD"].sum().reset_index()
     st.dataframe(monthly)
+    st.bar_chart(monthly, x="Month", x_label="Month")
     #:expected | 2025-09 | 2987.55 |
     #:actual   | 2025-09 | 2987.55 |
-    st.bar_chart(monthly, x="Month", x_label="Month")
 
-    #:service別コストを集計する。
-    st.header("service別コスト")
+    #:Service別コストを集計する。
+    st.header("Service別コスト")
     service_monthly = df.groupby(["Month", "Service"])["CostUSD"].sum().reset_index()
     service_monthly_pivot = service_monthly.pivot(
         index="Month", columns="Service", values="CostUSD"
@@ -71,3 +71,6 @@ if os.path.exists(csv_file_path):
     )
     st.dataframe(region_monthly_pivot)
     st.bar_chart(region_monthly_pivot)
+    #:         | Month.  | Region | CostUSD |
+    #:expected | 2025-09 | us-west-2 | 995.81 |
+    #:actual   | 2025-09 | us-west-2 | 995.81 |
