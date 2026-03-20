@@ -19,8 +19,9 @@ if os.path.exists(csv_file_path):
     st.dataframe(df)
     #:列1 Date "2025-09-13"
     #:列2 Service "Amazon EC2"
-    #:列3 CostUSD "2.09"
-    #:列4 UsageQuantity "32.25"
+    #:列3 Region "ap-northeast-1"
+    #:列4 CostUSD "2.09"
+    #:列5 UsageQuantity "32.25"
 
     df["Date"] = pd.to_datetime(df["Date"])
 
@@ -30,6 +31,16 @@ if os.path.exists(csv_file_path):
         finish_date = st.date_input("終了日", key="finish_date")
         query_text = f'"{start_date}" <= Date < "{finish_date}"'
         df = df.query(query_text)
+
+    #:サービスフィルタ
+    if st.checkbox("サービスフィルタを有効にする"):
+        service_list = df["Service"].unique()
+        selected_service_list = st.multiselect(
+            label="サービスを選択してください。",
+            options=service_list,
+            default=service_list,
+        )
+        df = df.query("Service in @selected_service_list")
 
     #:月毎の total cost を集計する。
     st.header("月毎の total cost")
