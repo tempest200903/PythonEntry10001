@@ -1,11 +1,19 @@
 entrypoint = "main.py"
-run = "streamlit run main.py --server.port 3000 --server.address 0.0.0.0"
+
+compile = "python -m pip install -r requirements.txt"
+run = "python -m streamlit run main.py --server.port 3000 --server.address 0.0.0.0"
 
 modules = ["python-3.11"]
 
+packager.language = "python3"
+
+[packager.features]
+guessImports = true
+packageSearch = true
+
 [nix]
 channel = "stable-25_05"
-packages = ["file", "glibcLocales", "u-root-cmds"]
+packages = ["file", "glibcLocales"]
 
 [unitTest]
 language = "python3"
@@ -14,16 +22,10 @@ language = "python3"
 requiredFiles = [".replit", "replit.nix"]
 
 [deployment]
-# run = ["python3", "main.py"]
-# run = "streamlit run main.py --server.port 3000 --server.address 0.0.0.0"
 run = [
-  "streamlit",
-  "run",
-  "main.py",
-  "--server.port",
-  "3000",
-  "--server.address",
-  "0.0.0.0",
+  "sh",
+  "-c",
+  "python -m pip install -r requirements.txt && python -m streamlit run main.py --server.port 3000 --server.address 0.0.0.0",
 ]
 deploymentTarget = "scheduled"
 
