@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import csv
 import os
-from store import save_dataframe
+from store import save_dataframe, restore_dataframe, clear_database
 
 st.title("クラウドコストダッシュボード")
 
@@ -17,7 +17,16 @@ if file:
 
 if os.path.exists(csv_file_path):
     df = pd.read_csv(csv_file_path)
-    save_dataframe(df)
+
+    if st.button("save to database"):
+        save_dataframe(df)
+
+    if st.button("clear database"):
+        clear_database()
+
+    if st.button("restore database"):
+        df = restore_dataframe()
+
     st.dataframe(df)
     #:列1 Date "2025-09-13"
     #:列2 Service "Amazon EC2"

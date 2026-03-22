@@ -1,6 +1,8 @@
 import os
+import pandas as pd
 from sqlalchemy import create_engine, String, Integer
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, Session
+from sqlalchemy import delete, Table, MetaData
 
 DATABASE_URL = os.environ["DATABASE_URL"]
 SQLALCHEMY_DATABASE_URL = DATABASE_URL.replace(
@@ -12,3 +14,15 @@ engine = create_engine(SQLALCHEMY_DATABASE_URL)
 
 def save_dataframe(df):
     df.to_sql("cost", engine, if_exists="replace", index=False)
+
+
+def clear_database():
+    metadata = MetaData()
+    cost = Table("cost", metadata, autoload_with=engine)
+
+    with engine.begin() as conn:
+        conn.execute(delete(cost))
+
+
+def restore_dataframe():
+    return pd.read_sql("cost", engine)
