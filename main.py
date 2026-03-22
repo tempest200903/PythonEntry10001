@@ -3,7 +3,7 @@ import pandas as pd
 import numpy as np
 import csv
 import os
-import store
+from store import save_dataframe
 
 st.title("クラウドコストダッシュボード")
 
@@ -17,6 +17,7 @@ if file:
 
 if os.path.exists(csv_file_path):
     df = pd.read_csv(csv_file_path)
+    save_dataframe(df)
     st.dataframe(df)
     #:列1 Date "2025-09-13"
     #:列2 Service "Amazon EC2"
