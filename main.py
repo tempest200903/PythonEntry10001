@@ -1,32 +1,20 @@
 import streamlit as st
 import pandas as pd
-import numpy as np
 import csv
 import os
-from store import save_dataframe, restore_dataframe, clear_database
+from store import save_dataframe, restore_dataframe
 
 st.title("クラウドコストダッシュボード")
 
-csv_file_path = "input.csv"
 file = st.file_uploader("CSVファイルをアップロードしてください.", type=["csv"])
-
 if file:
     st.text("CSVファイルアップロード成功")
-    with open(csv_file_path, "wb") as f:
-        f.write(file.read())
+    df = pd.read_csv(file)
+    save_dataframe(df)
+else:
+    df = restore_dataframe()
 
-if os.path.exists(csv_file_path):
-    df = pd.read_csv(csv_file_path)
-
-    if st.button("save to database"):
-        save_dataframe(df)
-
-    if st.button("clear database"):
-        clear_database()
-
-    if st.button("restore database"):
-        df = restore_dataframe()
-
+if df is not None:
     st.dataframe(df)
     #:列1 Date "2025-09-13"
     #:列2 Service "Amazon EC2"

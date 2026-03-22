@@ -16,13 +16,5 @@ def save_dataframe(df):
     df.to_sql("cost", engine, if_exists="replace", index=False)
 
 
-def clear_database():
-    metadata = MetaData()
-    cost = Table("cost", metadata, autoload_with=engine)
-
-    with engine.begin() as conn:
-        conn.execute(delete(cost))
-
-
 def restore_dataframe():
     return pd.read_sql("cost", engine)
